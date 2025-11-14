@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 
 from config import ex
 from dataloaders.datasets import TrainDataset as TrainDataset
-from models.cdfs_emd import FewShotSeg
+from model.cdfs import FewShotSeg
 from utils import *
 
 
@@ -23,6 +23,7 @@ def pixel_accuracy(pred, label):
 
 @ex.automain
 def main(_run, _config, _log):
+    print(torch.cuda.get_device_name(0))
     if _run.observers:
         # Set up source folder
         os.makedirs(f'{_run.observers[0].dir}/snapshots', exist_ok=True)

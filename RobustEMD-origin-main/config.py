@@ -11,7 +11,7 @@ from yacs.config import CfgNode as CN
 sacred.SETTINGS['CONFIG']['READ_ONLY_CONFIG'] = False
 sacred.SETTINGS.CAPTURE_MODE = 'no'
 
-ex = Experiment("CDFS")
+ex = Experiment("CDFS", save_git_info=False)
 ex.captured_out_filter = apply_backspaces_and_linefeeds
 
 ###### Set up source folder ######
@@ -27,7 +27,7 @@ def cfg():
     """Default configurations"""
     seed = 2021
     gpu_id = 0
-    num_workers = 0  # 0 for debugging.
+    num_workers = 8  # 0 for debugging.
     mode = 'train'
 
     ## dataset

@@ -181,14 +181,21 @@ class FewShotSeg(nn.Module):
                 preds = torch.cat((1.0 - qry_pred_up, qry_pred_up), dim=1)
 
                 outputs_qry.append(preds)
+                if train:
+                    outputs_qry_coarse.append(preds)
 
         output_qry = torch.stack(outputs_qry, dim=1)
         output_qry = output_qry.view(-1, *output_qry.shape[2:])
 
-        output_qry_coarse = torch.stack(outputs_qry_coarse, dim=1)
-        output_qry_coarse = output_qry_coarse.view(-1, *output_qry_coarse.shape[2:])
+        if train:
+            if len(outputs_qry_coarse) == 0:
+                outputs_qry_coarse = [pred.clone() for pred in outputs_qry]
+            output_qry_coarse = torch.stack(outputs_qry_coarse, dim=1)
+            output_qry_coarse = output_qry_coarse.view(-1, *output_qry_coarse.shape[2:])
 
-        return output_qry, output_qry_coarse
+            return output_qry, output_qry_coarse
+
+        return output_qry
 
     def getPred(self, fts, prototype, thresh):
         """
